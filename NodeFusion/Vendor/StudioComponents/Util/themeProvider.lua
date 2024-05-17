@@ -6,7 +6,7 @@ type computedOrValue = types.Computed<Color3> | types.Value<Color3>
 
 local Studio = settings().Studio
 local Plugin = script:FindFirstAncestorWhichIsA("Plugin")
-local Fusion = require(Plugin:FindFirstChild("Fusion", true))
+local Fusion = require(script.Parent.Parent.Parent.Fusion)
 
 local unwrap = require(script.Parent.unwrap)
 
@@ -94,10 +94,12 @@ do
 	local themeChangedConnection = Studio.ThemeChanged:Connect(updateTheme)
 	updateTheme()
 
-	Plugin.Unloading:Connect(function()
-		themeChangedConnection:Disconnect()
-		themeChangedConnection = nil
-	end)
+	if Plugin then
+		Plugin.Unloading:Connect(function()
+			themeChangedConnection:Disconnect()
+			themeChangedConnection = nil
+		end)		
+	end
 end
 
 return themeProvider

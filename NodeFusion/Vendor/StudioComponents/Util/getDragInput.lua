@@ -26,7 +26,7 @@
 --]]
 
 local Plugin = script:FindFirstAncestorWhichIsA("Plugin")
-local Fusion = require(Plugin:FindFirstChild("Fusion", true))
+local Fusion = require(script.Parent.Parent.Parent.Fusion)
 
 local getState = require(script.Parent.getState)
 local unwrap = require(script.Parent.unwrap)

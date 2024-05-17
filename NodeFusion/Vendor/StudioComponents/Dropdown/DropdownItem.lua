@@ -1,5 +1,5 @@
 local Plugin = script:FindFirstAncestorWhichIsA("Plugin")
-local Fusion = require(Plugin:FindFirstChild("Fusion", true))
+local Fusion = require(script.Parent.Parent.Parent.Fusion)
 
 local StudioComponents = script.Parent.Parent
 local StudioComponentsUtil = StudioComponents:FindFirstChild("Util")

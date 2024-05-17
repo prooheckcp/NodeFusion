@@ -1,5 +1,5 @@
 local Plugin = script:FindFirstAncestorWhichIsA("Plugin")
-local Fusion = require(Plugin:FindFirstChild("Fusion", true))
+local Fusion = require(script.Parent.Parent.Fusion)
 
 local Hydrate = Fusion.Hydrate
 
