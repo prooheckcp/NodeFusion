@@ -2,8 +2,10 @@
   "name": "NodeFusion",
   "tree": {
     "$className": "DataModel",
-    "ServerStorage": {
-      "$path": "NodeFusion"
+    "ServerScriptService": {
+      "NodeFusion": {
+        "$path": "NodeFusion"
+      }
     }
   }
 }
