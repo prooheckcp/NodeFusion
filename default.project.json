@@ -4,7 +4,10 @@
     "$className": "DataModel",
     "ServerScriptService": {
       "NodeFusion": {
-        "$path": "NodeFusion"
+        "$className": "Folder",
+        "NodeFusion": {
+          "$path": "NodeFusion"
+        }
       }
     }
   }
