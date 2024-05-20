@@ -17,16 +17,16 @@ local function Node(props)
     return New "Frame" {
         Parent = props.Parent,
         BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-        Size = UDim2.fromScale(1.3, 0),
+        Size = UDim2.fromScale(1, 1),
         AutomaticSize = Enum.AutomaticSize.Y,
         [Children] = {
             TopColor = New "Frame" {
                 BackgroundColor3 = nodeColor,
-                Size = UDim2.new(1, 0, 0, 50),
+                Size = UDim2.fromScale(1, 0.2),
                 LayoutOrder = 1,
                 [Children] = {
                     UICorner = New "UICorner" {
-                        CornerRadius = UDim.new(0, 10),
+                        CornerRadius = UDim.new(0.1),
                     },
                     ColorBottom = New "Frame" {
                         AnchorPoint = Vector2.new(0.5, 0),
@@ -62,6 +62,7 @@ local function Node(props)
                     }
                 }
             },
+            
             UILayout = New "UIListLayout" {
                 SortOrder = Enum.SortOrder.LayoutOrder,
                 Padding = UDim.new(0, 7),
