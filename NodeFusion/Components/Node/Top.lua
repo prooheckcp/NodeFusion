@@ -2,6 +2,8 @@ local Vendor = script.Parent.Parent.Parent.Vendor
 
 local Fusion = require(Vendor.Fusion)
 local TextInput = require(Vendor.StudioComponents.TextInput)
+local Gradient = require(script.Parent.Parent.Decoration.Gradient)
+local Settings = require(script.Parent.Parent.Settings)
 
 local New = Fusion.New
 local Children = Fusion.Children
@@ -23,12 +25,7 @@ local function Top(props)
             UICorner = New "UICorner" {
                 CornerRadius = UDim.new(0.1),
             },
-            ColorBottom = New "Frame" {
-                AnchorPoint = Vector2.new(0.5, 0),
-                BackgroundColor3 = nodeColor,
-                Position = UDim2.fromScale(0.5, 0.5),
-                Size = UDim2.fromScale(1, 0.5),
-            },
+            Gradient = Gradient {},
             TextInput = TextInput {
                 BackgroundTransparency = 1,
                 TextColor3 = Color3.fromRGB(255, 255, 255),
@@ -36,7 +33,7 @@ local function Top(props)
                 Text = "Hello World",
                 PlaceholderText = "Enter Name...",
                 TextXAlignment = Enum.TextXAlignment.Center,
-                Font = Enum.Font.Nunito,
+                FontFace = Settings.Font,
                 TextScaled = true,
                 ZIndex = 2,
                 [OnChange "Text"] = function(newText)

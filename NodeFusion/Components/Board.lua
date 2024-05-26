@@ -9,15 +9,22 @@ local MAX_ZOOM: number = 4
 local MINIMUM_ZOOM: number = 0.5
 local SCROLLING_SPEED: number = 15 -- Bigger == slower
 local GRID_SIZE: number = 75
+local MAX_Y_SIZE: number = 1000
+local MAX_X_SIZE: number = 1000
 
 local New = Fusion.New
 local Children = Fusion.Children
 local Value = Fusion.Value
 local Cleanup = Fusion.Cleanup
 local Computed = Fusion.Computed
+local OnEvent = Fusion.OnEvent
 
 local function Board(properties)
     local currentZoom = Value(1)
+    local offset = Value(Vector2.zero)
+    local startHoldOffset = Value(Vector2.zero)
+    local startHoldMousePosition = Value(Vector2.zero)
+    local mousePosition = Value(Vector2.zero)
 
     return newWrapper("Frame", properties){
         Size = UDim2.fromScale(1, 1),
@@ -34,7 +41,10 @@ local function Board(properties)
             end),
         },
         [Children] = {
-            Background = New "ImageLabel" {
+            Background = New "ImageButton" {
+                Name = "BoardBackground",
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.fromScale(0.5, 0.5),
                 BackgroundColor3 = Color3.fromRGB(20, 20, 20),
                 Image = "rbxassetid://17561832944",
                 ScaleType = Enum.ScaleType.Tile,
@@ -43,6 +53,15 @@ local function Board(properties)
                 end),
                 Size = UDim2.fromScale(1, 1),
                 ZIndex = 1,
+                [OnEvent "MouseButton1Down"] = function()
+                    startHoldMousePosition:set(mousePosition:get())
+                end,
+                [OnEvent "MouseButton1Up"] = function(...)
+                    print(...)
+                end,
+                [OnEvent "MouseMoved"] = function(x: number, y: number)
+                    mousePosition:set(Vector2.new(x, y))
+                end,
             },
             NodeContainer = New "Frame" {
                 AnchorPoint = Vector2.new(0.5, 0.5),
