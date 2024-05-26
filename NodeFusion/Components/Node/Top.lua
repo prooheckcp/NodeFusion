@@ -19,8 +19,9 @@ local function Top(props)
 
     return New "Frame" {
         BackgroundColor3 = nodeColor,
-        Size = UDim2.fromScale(1, 0.2),
+        Size = UDim2.new(1, 0, 0, 25),
         LayoutOrder = 1,
+        AutomaticSize = Enum.AutomaticSize.X,
         [Children] = {
             UICorner = New "UICorner" {
                 CornerRadius = UDim.new(0.1),
@@ -33,8 +34,9 @@ local function Top(props)
                 Text = "Hello World",
                 PlaceholderText = "Enter Name...",
                 TextXAlignment = Enum.TextXAlignment.Center,
+                AutomaticSize = Enum.AutomaticSize.X,
                 FontFace = Settings.Font,
-                TextScaled = true,
+                TextScaled = false,
                 ZIndex = 2,
                 [OnChange "Text"] = function(newText)
                     print("You've entered:", newText)

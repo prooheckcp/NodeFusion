@@ -25,6 +25,7 @@ local function Board(properties)
     local startHoldOffset = Value(Vector2.zero)
     local startHoldMousePosition = Value(Vector2.zero)
     local mousePosition = Value(Vector2.zero)
+    local holdingMouse = Value(false)
 
     return newWrapper("Frame", properties){
         Size = UDim2.fromScale(1, 1),
@@ -44,37 +45,56 @@ local function Board(properties)
             Background = New "ImageButton" {
                 Name = "BoardBackground",
                 AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.fromScale(0.5, 0.5),
+                Position = Computed(function()
+                    local currentOffset: Vector2 = offset:get()
+
+                    return UDim2.new(0.5, currentOffset.X, 0.5, currentOffset.Y)
+                end),
                 BackgroundColor3 = Color3.fromRGB(20, 20, 20),
                 Image = "rbxassetid://17561832944",
                 ScaleType = Enum.ScaleType.Tile,
                 TileSize = Computed(function()
                     return UDim2.fromOffset(GRID_SIZE * currentZoom:get(), GRID_SIZE * currentZoom:get())
                 end),
-                Size = UDim2.fromScale(1, 1),
+                Size = UDim2.new(1, MAX_X_SIZE * 2, 1, MAX_Y_SIZE * 2),
                 ZIndex = 1,
                 [OnEvent "MouseButton1Down"] = function()
                     startHoldMousePosition:set(mousePosition:get())
+                    startHoldOffset:set(offset:get())
+                    holdingMouse:set(true)
                 end,
-                [OnEvent "MouseButton1Up"] = function(...)
-                    print(...)
+                [OnEvent "MouseButton1Up"] = function()
+                    holdingMouse:set(false)
                 end,
                 [OnEvent "MouseMoved"] = function(x: number, y: number)
                     mousePosition:set(Vector2.new(x, y))
+
+                    if not holdingMouse:get() then
+                        return
+                    end
+
+                    local offsetDifference: Vector2 = mousePosition:get() - startHoldMousePosition:get()
+                    local newOffset: Vector2 = startHoldOffset:get() + offsetDifference
+                    offset:set(Vector2.new(
+                        math.clamp(newOffset.X, -MAX_X_SIZE, MAX_X_SIZE),
+                        math.clamp(newOffset.Y, -MAX_Y_SIZE, MAX_Y_SIZE)
+                    ))
                 end,
-            },
-            NodeContainer = New "Frame" {
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                BackgroundTransparency = 1,
-                Position = UDim2.fromScale(0.5, 0.5),
-                Size = Computed(function()
-                    return UDim2.fromOffset(100 * currentZoom:get(), 100 * currentZoom:get())
-                end),
-                ZIndex = 2,
                 [Children] = {
-                    Node {}
+                    NodeContainer = New "Frame" {
+                        AnchorPoint = Vector2.new(0.5, 0.5),
+                        BackgroundTransparency = 1,
+                        Position = UDim2.fromScale(0.5, 0.5),
+                        Size = Computed(function()
+                            return UDim2.fromOffset(GRID_SIZE * currentZoom:get(), GRID_SIZE * currentZoom:get())
+                        end),
+                        ZIndex = 2,
+                        [Children] = {
+                            Node {}
+                        }
+                    }
                 }
-            }
+            },
         }
     }
 end

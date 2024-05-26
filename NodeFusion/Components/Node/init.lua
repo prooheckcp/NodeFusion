@@ -14,57 +14,39 @@ local OnChange = Fusion.OnChange
 
 local function Node(props)
     local nodeColor = Value(Color3.fromRGB(221, 62, 62))
+    local properties = Value({
+        
+    })
 
     return New "Frame" {
         Parent = props.Parent,
         BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-        Size = UDim2.fromScale(1, 1),
-        AutomaticSize = Enum.AutomaticSize.Y,
+        BackgroundTransparency = 1,
+        Size = UDim2.fromScale(1, 0),
+        AutomaticSize = Enum.AutomaticSize.XY,
         ClipsDescendants = false,
         [Children] = {
-            Top {
+            TopBar = Top {
                 NodeColor = nodeColor,
+                LayoutOrder = 1,
             },
             
-            New "UIListLayout" {
-                SortOrder = Enum.SortOrder.LayoutOrder,
-                Padding = UDim.new(0, 7),
-            },
-
-            ScrollFrame {
-                Size = UDim2.fromScale(1, 0.5),
-                ClipsDescendants = false,
-                LayoutOrder = 2,
-                [Children] = {
-                    UILayout = New "UIListLayout" {
-                        SortOrder = Enum.SortOrder.LayoutOrder,
-                        Padding = UDim.new(0, 7),
-                    },
-    
-                    UIPadding = New "UIPadding" {
-                        PaddingLeft = UDim.new(0, 5),
-                        PaddingRight = UDim.new(0, 5),
-                        PaddingBottom = UDim.new(0, 10),
-                        PaddingTop = UDim.new(0, 10),
-                    },
-
-                    DropDown = Dropdown {
-                        Value = Value("Custom"),
-                        Options = {"Custom", "Extra", "Test", "Too", "Long"},
-                        OnSelected = function(newItem)
-                            print("You've selected:", newItem)
-                        end,
-                    }                    
-                }
-            }                
-
             --[[
-            Button {
-                Position = UDim2.fromScale(0, 0),
+            DropDown = Dropdown {
+                LayoutOrder = 2,
+                Value = Value("Custom"),
+                Options = {"Custom", "Extra", "Test", "Too", "Long"},
+                Size = UDim2.fromOffset(50, 50),
+                OnSelected = function(newItem)
+                    print("You've selected:", newItem)
+                end,
             },                
             ]]
 
-
+            UIListLayout = New "UIListLayout" {
+                SortOrder = Enum.SortOrder.LayoutOrder,
+                Padding = UDim.new(0, 0),
+            },
         }
     }
 end
