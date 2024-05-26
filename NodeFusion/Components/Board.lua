@@ -22,6 +22,7 @@ local function Board(properties)
     return newWrapper("Frame", properties){
         Size = UDim2.fromScale(1, 1),
         BackgroundTransparency = 1,
+        Name = "Board",
         [Cleanup] = {
             UserInputService.InputChanged:Connect(function(input: InputObject)
                 if input.UserInputType == Enum.UserInputType.MouseWheel then

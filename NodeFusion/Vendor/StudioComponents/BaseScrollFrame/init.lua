@@ -119,6 +119,7 @@ return function(props: BaseScrollFrameProperties): Frame
 				[Ref] = scrollFrame,
 
 				Name = "Canvas",
+				ClipsDescendants = false,
 				Size = UDim2.fromScale(1, 1),
 				BottomImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
 				TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
