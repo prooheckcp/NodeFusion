@@ -23,9 +23,6 @@ local function Top(props)
         LayoutOrder = 1,
         AutomaticSize = Enum.AutomaticSize.X,
         [Children] = {
-            UICorner = New "UICorner" {
-                CornerRadius = UDim.new(0.1),
-            },
             Gradient = Gradient {},
             TextInput = TextInput {
                 BackgroundTransparency = 1,
