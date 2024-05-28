@@ -29,31 +29,32 @@ local function Board(properties)
     local mousePosition = Value(Vector2.zero)
     local holdingMouse = Value(false)
     local absoluteSize = Value(Vector2.zero)
+    local absolutePosition = Value(Vector2.zero)
 
     return newWrapper("Frame", properties){
         Size = UDim2.fromScale(1, 1),
         BackgroundTransparency = 1,
         Name = "Board",
         [Cleanup] = {
-            Observer(currentZoom):onChange(function()
-                local zoom: number = currentZoom:get()
-                local newMousePosition: Vector2 = mousePosition:get()
-                print("Current MP", newMousePosition.X, newMousePosition.Y)
-                local tileSize: number = GRID_SIZE * currentZoom:get() * TILE_COUNT_X
-                local offset_x = newMousePosition.X * (1 - zoom)
-                local offset_y = newMousePosition.Y * (1 - zoom)
-
-                offset:set(Vector2.new(
-                    offset:get().X + offset_x,
-                    offset:get().Y + offset_y
-                ))                    
-            end),
             UserInputService.InputChanged:Connect(function(input: InputObject)
                 if input.UserInputType == Enum.UserInputType.MouseWheel then
-                    local delta = input.Position.Z
-                    local zoom = currentZoom:get()
-                    zoom = math.clamp(zoom + delta/SCROLLING_SPEED, MINIMUM_ZOOM, MAX_ZOOM)
-                    currentZoom:set(zoom)
+                    local delta: number = input.Position.Z
+                    local zoom: number = currentZoom:get()
+                    local newZoom: number = math.clamp(zoom + delta/SCROLLING_SPEED, MINIMUM_ZOOM, MAX_ZOOM)
+                    local originalSize: Vector2 = Vector2.new(GRID_SIZE * TILE_COUNT_X, GRID_SIZE * TILE_COUNT_Y)
+                    local currentSize: Vector2 = originalSize * zoom
+                    local newSize: Vector2 = originalSize * newZoom
+                    local sizeDifference: Vector2 = newSize - currentSize
+                    local growthChange: Vector2 = sizeDifference/newSize
+                    local mouseFramePosition: Vector2 = mousePosition:get() - absolutePosition:get()
+                    local distanceFromCenter: Vector2 = mouseFramePosition - absoluteSize:get()/2
+                    local newMousePosition: Vector2 = distanceFromCenter * (Vector2.one + growthChange)
+                    local mousePositionDifference: Vector2 = newMousePosition - distanceFromCenter
+                    local zoomDelta: number = newZoom - zoom
+                    local finalOffsetDelta: Vector2 = mousePositionDifference * (1 + zoomDelta)
+
+                    offset:set(offset:get() - finalOffsetDelta)
+                    currentZoom:set(newZoom)
                 end
             end),
         },
@@ -61,6 +62,7 @@ local function Board(properties)
             Background = New "ImageButton" {
                 Name = "BoardBackground",
                 [Out "AbsoluteSize"] = absoluteSize,
+                [Out "AbsolutePosition"] = absolutePosition,
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 Position = Computed(function()
                     local currentOffset: Vector2 = offset:get()
@@ -76,7 +78,9 @@ local function Board(properties)
                 Image = "rbxassetid://17561832944",
                 ScaleType = Enum.ScaleType.Tile,
                 TileSize = Computed(function()
-                    return UDim2.fromOffset(GRID_SIZE * currentZoom:get(), GRID_SIZE * currentZoom:get())
+                    local gridCount: number = math.round(GRID_SIZE * currentZoom:get())
+
+                    return UDim2.fromOffset(gridCount, gridCount)
                 end),
                 Size = Computed(function()
                     return UDim2.fromOffset(GRID_SIZE * TILE_COUNT_X * currentZoom:get(), GRID_SIZE * TILE_COUNT_Y * currentZoom:get())
@@ -95,6 +99,12 @@ local function Board(properties)
                 end,
                 [OnEvent "MouseMoved"] = function(x: number, y: number)
                     mousePosition:set(Vector2.new(x, y))
+
+                    --[[
+                    local mouseFramePosition: Vector2 = mousePosition:get() - absolutePosition:get()
+                    local distanceFromCenter: Vector2 = mouseFramePosition - absoluteSize:get()/2
+                    print("Mouse position:", distanceFromCenter)                        
+                    ]]
 
                     if not holdingMouse:get() then
                         return
