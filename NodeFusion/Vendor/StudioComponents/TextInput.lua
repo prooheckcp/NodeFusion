@@ -73,11 +73,14 @@ return function(props: TextInputProperties): TextLabel
 			TextColor3 = getMotionState(themeProvider:GetColor(Enum.StudioStyleGuideColor.MainText, mainModifier), "Spring", 40),
 			TextEditable = isEnabled,
 
-			TextXAlignment = Computed(function()
+			TextXAlignment = props.TextXAlignment or
+			Computed(function()
 				local bounds = (unwrap(currentTextBounds) or Vector2.zero).X + 5 -- because of padding
 				local pixels = (unwrap(absoluteTextBoxSize) or Vector2.zero).X
 				return if bounds >= pixels then Enum.TextXAlignment.Right else Enum.TextXAlignment.Left
-			end),
+			end),				
+
+
 
 			ClearTextOnFocus = Computed(function()
 				local clearTextOnFocus = (unwrap(props.ClearTextOnFocus) or false)

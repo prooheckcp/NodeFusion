@@ -9,18 +9,25 @@ local New = Fusion.New
 local Children = Fusion.Children
 local Value = Fusion.Value
 local OnChange = Fusion.OnChange
+local Computed = Fusion.Computed
 
 --[[
     - props
-        NodeColor: Color3
+        NodeColor: Value<Color3>
+        Scale: Value<number>
 ]]
 local function Top(props)
     local nodeColor = props.NodeColor or Value(Color3.fromRGB(164, 76, 76))
+    local scale = props.Scale or Value(1)
+    local nodeName = props.NodeName or Value("")
 
     return New "Frame" {
         BackgroundColor3 = nodeColor,
-        Size = UDim2.new(1, 0, 0, 25),
+        Size = Computed(function()
+            return UDim2.new(1, 0, 0, 25 * scale:get())
+        end),
         LayoutOrder = 1,
+        Name = "Header",
         AutomaticSize = Enum.AutomaticSize.X,
         [Children] = {
             Gradient = Gradient {},
@@ -28,12 +35,12 @@ local function Top(props)
                 BackgroundTransparency = 1,
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 Size = UDim2.fromScale(1, 1),
-                Text = "Hello World",
+                Text = nodeName,
                 PlaceholderText = "Enter Name...",
                 TextXAlignment = Enum.TextXAlignment.Center,
                 AutomaticSize = Enum.AutomaticSize.X,
                 FontFace = Settings.Font,
-                TextScaled = false,
+                TextScaled = true,
                 ZIndex = 2,
                 [OnChange "Text"] = function(newText)
                     print("You've entered:", newText)

@@ -6,7 +6,7 @@ local function Gradient()
     return New "UIGradient" {
         Color = ColorSequence.new {
             ColorSequenceKeypoint.new(0, Color3.fromRGB(250, 250, 250)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 80, 80)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(173, 173, 173)),
         },
         Rotation = 90,
     }

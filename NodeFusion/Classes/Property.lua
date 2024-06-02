@@ -4,15 +4,17 @@ type PropertyType = PropertyType.PropertyType
 
 local Property = {}
 Property.__index = Property
+Property.Name = "N/A"
 Property.PropertyType = PropertyType.String :: PropertyType
 Property.Value = nil :: any?
 
-function Property.new(propertyType: PropertyType, startValue: any?) : Property
+function Property.new(name: string, propertyType: PropertyType, startValue: any?) : Property
     if typeof(startValue) ~= propertyType then
         error("Property value must be of type " .. propertyType)
     end
 
     local self = setmetatable({}, Property)
+    self.Name = name
     self.Value = startValue
     self.PropertyType = propertyType
 

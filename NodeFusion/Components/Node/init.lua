@@ -12,6 +12,8 @@ local Top = require(script.Top)
 local PropertyFrame = require(script.PropertyFrame)
 local Property = require(script.Parent.Parent.Classes.Property)
 local PropertyType = require(script.Parent.Parent.Enums.PropertyType)
+local Settings = require(script.Parent.Settings)
+local Gradient = require(script.Parent.Decoration.Gradient)
 
 local New = Fusion.New 
 local Children = Fusion.Children
@@ -19,47 +21,47 @@ local Value = Fusion.Value
 local OnChange = Fusion.OnChange
 local ForValues = Fusion.ForValues
 
+--[[
+    - props
+        - NodeColor: Value<Color3>
+        - NodeName: Value<string>
+        - Scale: Value<number>
+]]
 local function Node(props)
-    local nodeColor = Value(Color3.fromRGB(221, 62, 62))
+    local nodeName = props.NodeName or Value("Node")
+    local nodeColor = props.NodeColor or Value(Color3.fromRGB(221, 62, 62))
+    local scale = props.Scale or Value(1)
     local properties = Value({
-        Property.new(PropertyType.String, "Hello World"),
+        Property.new("Name", PropertyType.String, "Name"),
+        Property.new("Color", PropertyType.Color3, Color3.fromRGB(255, 255, 255)),
     })
 
     return New "Frame" {
         AnchorPoint = Vector2.new(0, 0),
         Parent = props.Parent,
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+        Name = "Node",
+        BackgroundColor3 = Settings.SecondColor,
         BackgroundTransparency = 0,
-        Size = UDim2.fromScale(1, 1),
-        AutomaticSize = Enum.AutomaticSize.X,
+        Size = UDim2.fromScale(0.5, 0),
+        AutomaticSize = Enum.AutomaticSize.XY,
         ClipsDescendants = false,
         [Children] = {
             TopBar = Top {
                 NodeColor = nodeColor,
+                NodeName = nodeName,
                 LayoutOrder = 1,
+                Scale = scale,
             },
             
+            Gradient = Gradient {},
+            UICorner = New "UICorner" {
+                CornerRadius = UDim.new(0, 10),
+            },
             Properties = ForValues(properties, function()
-                local instances = {}
-
-                for _ in properties:get() do
-                    instances[#instances+1] = PropertyFrame {}
-                end
-
-                return instances
-            end),
-
-        
-            DropDown = Dropdown {
-                LayoutOrder = 2,
-                Value = Value("Custom"),
-                Options = {"Custom", "Extra", "Test", "Too", "Long"},
-                Size = UDim2.fromOffset(50, 50),
-                OnSelected = function(newItem)
-                    print("You've selected:", newItem)
-                end,
-            },                
-    
+                return PropertyFrame {
+                    Scaled = scale,
+                }
+            end, Fusion.cleanup),
 
             UIListLayout = New "UIListLayout" {
                 SortOrder = Enum.SortOrder.LayoutOrder,
