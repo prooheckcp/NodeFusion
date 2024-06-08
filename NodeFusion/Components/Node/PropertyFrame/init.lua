@@ -3,8 +3,8 @@ local NodeFusion = script.Parent.Parent.Parent
 local Fusion = require(NodeFusion.Vendor.Fusion)
 local Settings = require(NodeFusion.Components.Settings)
 local TextInput = require(NodeFusion.Components.Templates.TextInput)
+local Text = require(NodeFusion.Components.Templates.Text)
 --local TextInput = require(NodeFusion.Vendor.StudioComponents.TextInput)
-local Text = require(script.Text)
 
 local New = Fusion.New
 local Children = Fusion.Children

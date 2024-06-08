@@ -1,7 +1,7 @@
-local Vendor = script.Parent.Parent.Parent.Parent.Vendor
+local NodeFusion = script.Parent.Parent.Parent
 
-local Settings = require(script.Parent.Parent.Parent.Settings)
-local newWrapper = require(Vendor.Parent.Functions.newWrapper)
+local Settings = require(NodeFusion.Components.Settings)
+local newWrapper = require(NodeFusion.Functions.newWrapper)
 
 local function Text(properties)
     return newWrapper("TextLabel", properties){

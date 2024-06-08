@@ -29,7 +29,7 @@ local ForValues = Fusion.ForValues
 ]]
 local function Node(props)
     local nodeName = props.NodeName or Value("Node")
-    local nodeColor = props.NodeColor or Value(Color3.fromRGB(221, 62, 62))
+    local nodeColor = props.NodeColor or Value(Color3.fromRGB(161, 161, 161))
     local scale = props.Scale or Value(1)
     local properties = Value({
         Property.new("Name", PropertyType.String, "Name"),

@@ -25,16 +25,16 @@ local function TextInputComponent(properties)
         Position = UDim2.fromScale(0, 0.5),
         [Children] = {
             TextInput {
+                LayoutOrder = 1,
                 BackgroundTransparency = Computed(function()
-                    print("Is Focused: ", isFocused:get())
-                    return isFocused:get() and 0 or 1
+                    return isFocused:get() and 0 or 0.9
                 end),
                 TextScaled = true,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 AutomaticSize = Enum.AutomaticSize.X,
                 Size = UDim2.fromScale(1, 1),
                 Text = test,
-                PlaceholderText = "Hello",
+                PlaceholderText = "Insert Text Here...",
                 [OnChange "Text"] = function(newText: string)
 
                 end,
