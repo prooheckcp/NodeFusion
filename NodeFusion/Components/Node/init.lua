@@ -15,6 +15,8 @@ local PropertyType = require(script.Parent.Parent.Enums.PropertyType)
 local Settings = require(script.Parent.Settings)
 local Gradient = require(script.Parent.Decoration.Gradient)
 
+type Property = Property.Property
+
 local New = Fusion.New 
 local Children = Fusion.Children
 local Value = Fusion.Value
@@ -42,7 +44,7 @@ local function Node(props)
         Name = "Node",
         BackgroundColor3 = Settings.SecondColor,
         BackgroundTransparency = 0,
-        Size = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.new(0, 0, 0, 0),
         Position = UDim2.fromScale(0.5, 0.5),
         AutomaticSize = Enum.AutomaticSize.XY,
         ClipsDescendants = false,
@@ -58,9 +60,10 @@ local function Node(props)
             UICorner = New "UICorner" {
                 CornerRadius = UDim.new(0, 10),
             },
-            Properties = ForValues(properties, function()
+            Properties = ForValues(properties, function(property: Property)
                 return PropertyFrame {
                     Scaled = scale,
+                    Property = property,
                 }
             end, Fusion.cleanup),
 

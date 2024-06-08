@@ -4,11 +4,15 @@ local TextInput = require(NodeFusion.Vendor.StudioComponents.TextInput)
 local newWrapper = require(NodeFusion.Functions.newWrapper)
 local Fusion = require(NodeFusion.Vendor.Fusion)
 
+local TWEEN_INFO: TweenInfo = TweenInfo.new(0.2)
+
 local Children = Fusion.Children
 local OnChange = Fusion.OnChange
 local Value = Fusion.Value
 local OnEvent = Fusion.OnEvent
 local Computed = Fusion.Computed
+local Tween = Fusion.Tween
+local Observer = Fusion.Observer
 
 --[[
     - props
@@ -17,6 +21,16 @@ local Computed = Fusion.Computed
 local function TextInputComponent(properties)
     local test = Value("uwu")
     local isFocused = Value(false)
+    local backgroundTransparency = Value(1)
+    local backgroundTransparencyTween = Tween(backgroundTransparency, TWEEN_INFO)
+
+    local function backgroundTransparencyChanged()
+        backgroundTransparency:set(isFocused:get() and 0 or 1)
+    end
+
+    Observer(isFocused):onChange(backgroundTransparencyChanged)
+    backgroundTransparencyChanged()
+    
     return newWrapper("Frame", properties){
         AnchorPoint = Vector2.new(0, 0.5),
         BackgroundTransparency = 1,
@@ -26,9 +40,7 @@ local function TextInputComponent(properties)
         [Children] = {
             TextInput {
                 LayoutOrder = 1,
-                BackgroundTransparency = Computed(function()
-                    return isFocused:get() and 0 or 0.9
-                end),
+                BackgroundTransparency = backgroundTransparencyTween,
                 TextScaled = true,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 AutomaticSize = Enum.AutomaticSize.X,

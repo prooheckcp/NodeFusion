@@ -4,7 +4,15 @@ local Fusion = require(NodeFusion.Vendor.Fusion)
 local Settings = require(NodeFusion.Components.Settings)
 local TextInput = require(NodeFusion.Components.Templates.TextInput)
 local Text = require(NodeFusion.Components.Templates.Text)
+local PropertyType = require(NodeFusion.Enums.PropertyType)
+local Property = require(NodeFusion.Classes.Property)
+
+type Property = Property.Property
 --local TextInput = require(NodeFusion.Vendor.StudioComponents.TextInput)
+
+local PROPERTY_INPUT = {
+    [PropertyType.String] = require(script.String),
+}
 
 local New = Fusion.New
 local Children = Fusion.Children
@@ -14,9 +22,15 @@ local Computed = Fusion.Computed
 --[[
     - props
         Scale: Value<number>
+        Property: Value<Property>
 ]]
-local function Property(props)
+local function PropertyFrame(props)
     local scale = props.Scale or Value(1)
+    local property: Property = props.Property or Value(Property.new("Name", PropertyType.String, "Name"))
+
+    if not PROPERTY_INPUT[property.PropertyType] then
+        --return
+    end
 
     return New "Frame" {
         Name = "PropertyFrame",
@@ -48,4 +62,4 @@ local function Property(props)
     }
 end
 
-return Property
+return PropertyFrame
